@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect, useRef, FormEvent } from "react";
+import { RiSendPlaneFill } from "react-icons/ri";
 
 function App() {
   const [messages, setMessages] = useState([
@@ -7,7 +8,10 @@ function App() {
   ]);
   const [inputText, setInputText] = useState("");
 
-  const handleSendMessage = () => {
+  const messagesEndRef = useRef(null); // Reference to scroll to the bottom of the chat
+
+  const handleSendMessage = (e: FormEvent) => {
+    e.preventDefault();
     if (inputText.trim()) {
       const newMessage = {
         id: messages.length + 1,
@@ -19,19 +23,25 @@ function App() {
     }
   };
 
+  // Scroll to the bottom whenever messages change
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
       <h2 className="text-3xl mb-6">Gen AI</h2>
-      <div className="flex flex-col justify-between bg-gray-800 rounded-lg p-6 w-[80%] max-w-4xl h-[90vh] shadow-xl">
+      {/* chat container with glass effect */}
+      <div className="flex flex-col justify-between bg-gray-800 bg-opacity-40 backdrop-blur-sm rounded-lg p-6 w-full max-w-4xl h-[90vh] shadow-xl">
         {/* Messages container */}
         <div className="flex flex-col flex-grow overflow-y-auto space-y-4 mb-4 no-scrollbar p-8">
           {messages.map((msg) => (
             <div
               key={msg.id}
-              className={`p-3 rounded-lg  max-w-[80%] relative ${
+              className={`p-3 rounded-lg text-lg max-w-[80%] relative ${
                 msg.sender === "user"
-                  ? "bg-blue-600 self-end text-white " // Right-aligned user messages with curved tail
-                  : "bg-gray-700 self-start text-white  " // Left-aligned system messages with curved tail
+                  ? "bg-blue-600 self-end text-white "
+                  : "bg-gray-700 self-start text-white  "
               }`}
             >
               {msg.text}
@@ -44,24 +54,31 @@ function App() {
               ></span>
             </div>
           ))}
+          {/* Reference div to scroll to the bottom */}
+          <div ref={messagesEndRef}></div>
         </div>
 
         {/* Input & Send Button */}
-        <div className="flex gap-4">
+        <form onSubmit={handleSendMessage} className="flex gap-4">
           <input
             type="text"
             placeholder="Type a message..."
             value={inputText}
             onChange={(e) => setInputText(e.target.value)}
-            className="w-full p-3 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full p-6 bg-gray-700 text-white rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <button
+          {/* <button
             onClick={handleSendMessage}
             className="px-6 py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 focus:outline-none"
           >
             Send
-          </button>
-        </div>
+          </button> */}
+         {inputText && <RiSendPlaneFill
+            onClick={handleSendMessage}
+            className="text-blue-500 absolute right-10 bottom-10 cursor-pointer"
+            size={34}
+          />}
+        </form>
       </div>
     </div>
   );
