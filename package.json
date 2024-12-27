@@ -10,6 +10,8 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@langchain/core": "^0.3.26",
+    "@langchain/openai": "^0.3.16",
     "autoprefixer": "^10.4.20",
     "langchain": "^0.3.8",
     "postcss": "^8.4.49",
