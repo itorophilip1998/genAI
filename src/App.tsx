@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, FormEvent } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
+import { getAnswer } from "./ai/langchain";
 
 function App() {
   const [messages, setMessages] = useState([
@@ -10,7 +11,7 @@ function App() {
 
   const messagesEndRef = useRef(null); // Reference to scroll to the bottom of the chat
 
-  const handleSendMessage = (e: FormEvent) => {
+  const handleSendMessage = async(e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (inputText.trim()) {
       const newMessage = {
@@ -20,6 +21,8 @@ function App() {
       };
       setMessages([...messages, newMessage]);
       setInputText("");
+      const answer = await getAnswer(inputText);
+      console.debug(answer);
     }
   };
 
@@ -73,11 +76,13 @@ function App() {
           >
             Send
           </button> */}
-         {inputText && <RiSendPlaneFill
-            onClick={handleSendMessage}
-            className="text-blue-500 absolute right-10 bottom-10 cursor-pointer"
-            size={34}
-          />}
+          {inputText && (
+            <RiSendPlaneFill
+              onClick={handleSendMessage}
+              className="text-blue-500 absolute right-10 bottom-10 cursor-pointer"
+              size={34}
+            />
+          )}
         </form>
       </div>
     </div>
