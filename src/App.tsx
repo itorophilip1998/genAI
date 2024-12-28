@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, FormEvent } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
-import { getAnswer } from "./ai/langchain";
+// import { getAnswer } from "./ai/langchain";
+import  axios  from 'axios';
 
 function App() {
   const [messages, setMessages] = useState([
@@ -21,8 +22,12 @@ function App() {
       };
       setMessages([...messages, newMessage]);
       setInputText("");
-      const answer = await getAnswer(inputText);
-      console.debug(answer);
+      // const answer = await getAnswer(inputText);
+      const response = await axios.post("http://localhost:8000/generate-text", {
+        prompt: inputText,
+      });
+
+      console.debug(response);
     }
   };
 
@@ -30,6 +35,7 @@ function App() {
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+ 
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
