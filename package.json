@@ -12,6 +12,8 @@
   "dependencies": {
     "@langchain/core": "^0.3.26",
     "@langchain/openai": "^0.3.16",
+    "@types/peerjs": "^1.1.0",
+    "@types/socket.io-client": "^3.0.0",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
