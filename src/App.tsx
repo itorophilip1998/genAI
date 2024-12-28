@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, FormEvent } from "react";
 import { RiSendPlaneFill } from "react-icons/ri";
-// import { getAnswer } from "./ai/langchain";
+import { getAnswer } from "./ai/langchain";
 import  axios  from 'axios';
 
 function App() {
@@ -22,7 +22,7 @@ function App() {
       };
       setMessages([...messages, newMessage]);
       setInputText("");
-      // const answer = await getAnswer(inputText);
+      const answer = await getAnswer(inputText);
       const response = await axios.post("http://localhost:8000/generate-text", {
         prompt: inputText,
       });
